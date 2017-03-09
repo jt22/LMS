@@ -1,10 +1,27 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
+ * To change this license header, cho    @Override
+    public int tabForCoordinate(JTabbedPane pane, int x, int y) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Rectangle getTabBounds(JTabbedPane pane, int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getTabRunCount(JTabbedPane pane) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+ose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package librarymanagementsystem;
 
+import com.sun.java.swing.plaf.windows.WindowsTabbedPaneUI;
+import java.awt.Color;
+import java.awt.Rectangle;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -19,6 +36,10 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
+import java.awt.*;
+import javax.swing.plaf.TabbedPaneUI;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
+import javax.swing.plaf.synth.SynthTabbedPaneUI;
 import net.proteanit.sql.DbUtils;
 /**
  *
@@ -41,6 +62,7 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
         tblebrw();
         tblertrn();
     }
+    
     
     public void tableupdate(){
         try {
@@ -83,8 +105,20 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/appdev","root","");
                 Statement statement = conn.createStatement();
-                ResultSet rs = statement.executeQuery("Select * from library where "+srchcombo.getSelectedItem()+" like '"+isbnsrch.getText()+"%' ");
+                ResultSet rs = statement.executeQuery("Select * from library where "+srchcombo.getSelectedItem()+" like '%"+isbnsrch.getText()+"%' ");
                 jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    public void tbleMnagebooks(){
+        try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/appdev","root","");
+                Statement statement = conn.createStatement();
+                ResultSet rs = statement.executeQuery("Select * from library where "+mngCmbo.getSelectedItem()+" like '%"+mngSrchTxt.getText()+"%' ");
+                jTable2.setModel(DbUtils.resultSetToTableModel(rs));
         }
         catch(Exception e){
             JOptionPane.showMessageDialog(null, e);
@@ -92,63 +126,73 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
     }
     
     public void tblebrw(){
-        if(brwtxt.getText().equals("")){
-            try {
-
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/appdev","root","");
-                Statement statement = conn.createStatement();
-                ResultSet rs = statement.executeQuery("Select * from library where Status = 'Available' ");
-                jTable3.setModel(DbUtils.resultSetToTableModel(rs));
-                
-        }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
-        }
-        else{
+//        if(brwtxt.getText().equals("")){
+//            try {
+//
+//                Class.forName("com.mysql.jdbc.Driver");
+//                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/appdev","root","");
+//                Statement statement = conn.createStatement();
+//                ResultSet rs = statement.executeQuery("Select * from library where Status = 'Available' ");
+//                jTable3.setModel(DbUtils.resultSetToTableModel(rs));
+//                
+//        }
+//        catch(Exception e){
+//            JOptionPane.showMessageDialog(null, e);
+//        }
+//        }
+//        else{
         try {
 
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/appdev","root","");
                 Statement statement = conn.createStatement();
-                ResultSet rs = statement.executeQuery("Select * from library where "+brwcmbo.getSelectedItem()+" like '"+brwtxt.getText()+"%' or "+brwcmbo.getSelectedItem()+" like '%"+brwtxt.getText()+"' or "+brwcmbo.getSelectedItem()+" like '%"+brwtxt.getText()+"%' and Status = 'Available' ");
+                ResultSet rs = statement.executeQuery("Select * from library where "+brwcmbo.getSelectedItem()+" like '%"+brwtxt.getText()+"%' and Status = 'Available' ");
                 jTable3.setModel(DbUtils.resultSetToTableModel(rs));
                 
         }
         catch(Exception e){
             JOptionPane.showMessageDialog(null, e);
         }
-        }
+//        }s
     }
     
     public void tblertrn(){
-        if(rtrntxt.getText().equals("")){
-            try {
-
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/appdev","root","");
-                Statement statement = conn.createStatement();
-                ResultSet rs = statement.executeQuery("Select borrowId as 'Borrow ID',stuId as 'Student ID',ISBN,dateBrw as 'Date Borrowed',dateRtrn as 'Date Return' from borrw_tble where dateRtrn IS NULL ");
-                jTable4.setModel(DbUtils.resultSetToTableModel(rs));
-                
-        }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
-        }
-        else{
+//        if(rtrntxt.getText().equals("")){
+//            try {
+//
+//                Class.forName("com.mysql.jdbc.Driver");
+//                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/appdev","root","");
+//                Statement statement = conn.createStatement();
+//                ResultSet rs = statement.executeQuery("Select borrowId as 'Borrow ID',stuId as 'Student ID',ISBN,dateBrw as 'Date Borrowed',dateRtrn as 'Date Return' from borrw_tble where dateRtrn IS NULL ");
+//                jTable4.setModel(DbUtils.resultSetToTableModel(rs));
+//                
+//        }
+//        catch(Exception e){
+//            JOptionPane.showMessageDialog(null, e);
+//        }
+//        }
+//        else{
         try {
+                String selecteditem = rtrncmbo.getSelectedItem().toString();
+                if(selecteditem.equals("Borrow ID")){
+                    selecteditem = "borrowId";
+                }
+                if(selecteditem.equals("Student ID")){
+                    selecteditem = "studId";
+                }
+                if(selecteditem.equals("Date Borrowed")){
+                    selecteditem = "dateBrw";
+                }
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/appdev","root","");
                 Statement statement = conn.createStatement();
-                ResultSet rs = statement.executeQuery("Select borrowId as 'Borrow ID',stuId as 'Student ID',ISBN,dateBrw as 'Date Borrowed',dateRtrn as 'Date Return' from borrw_tble where "+rtrncmbo.getSelectedItem()+" like '"+rtrntxt.getText()+"%' and dateRtrn IS NULL ");
+                ResultSet rs = statement.executeQuery("Select borrowId as 'Borrow ID',stuId as 'Student ID',ISBN,dateBrw as 'Date Borrowed',dateRtrn as 'Date Return' from borrw_tble where "+selecteditem+" like '%"+rtrntxt.getText()+"%' and dateRtrn IS NULL ");
                 jTable4.setModel(DbUtils.resultSetToTableModel(rs));                
         }
         catch(Exception e){
             JOptionPane.showMessageDialog(null, e);
         }
-        }
+//        }
     }
     public boolean checkID(String student){
          try {
@@ -214,6 +258,7 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
         libraryQuery2 = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT l FROM Library l");
         libraryList2 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : libraryQuery2.getResultList();
         jTabbedPane6 = new javax.swing.JTabbedPane();
+        jTabbedPane6.setUI(new WindowsTabbedPaneUI());
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -253,6 +298,10 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
         jTable2 = new javax.swing.JTable();
         Delete = new javax.swing.JButton();
         Edit = new javax.swing.JButton();
+        mngSrchTxt = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        mngCmbo = new javax.swing.JComboBox<>();
+        mngClear = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -285,11 +334,9 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
             }
         });
 
-        isbnsrch.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                isbnsrchInputMethodTextChanged(evt);
+        isbnsrch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                isbnsrchKeyReleased(evt);
             }
         });
 
@@ -329,7 +376,7 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
                 .addContainerGap(147, Short.MAX_VALUE))
         );
 
-        jTabbedPane6.addTab("Home", new javax.swing.ImageIcon("C:\\Users\\justine\\Desktop\\School\\AppDEv\\AppDevProj\\Home-icon.png"), jPanel2); // NOI18N
+        jTabbedPane6.addTab("Home", new javax.swing.ImageIcon(getClass().getResource("/librarymanagementsystem/rsz_home1.png")), jPanel2); // NOI18N
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -381,26 +428,23 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(brwcmbo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(brwtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(brwsrch)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(brwcmbo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(brwtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(brwsrch)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addGap(18, 18, 18)
                         .addComponent(studIdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(borrwbut)
-                        .addGap(23, 23, 23))))
+                        .addComponent(borrwbut)))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -421,7 +465,7 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
                 .addGap(60, 60, 60))
         );
 
-        jTabbedPane6.addTab("Borrow Books", jPanel3);
+        jTabbedPane6.addTab("Borrow Books", new javax.swing.ImageIcon(getClass().getResource("/librarymanagementsystem/rsz_borrow1.png")), jPanel3); // NOI18N
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -454,7 +498,7 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
             }
         });
 
-        rtrncmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ISBN", "Title", "Author", "Publisher" }));
+        rtrncmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Borrow ID", "Student ID", "ISBN", "Date Borrowed" }));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -491,12 +535,12 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
                     .addComponent(rtrncmbo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(44, 44, 44)
                 .addComponent(rtrnbut)
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
-        jTabbedPane6.addTab("Return Books", jPanel4);
+        jTabbedPane6.addTab("Return Books", new javax.swing.ImageIcon(getClass().getResource("/librarymanagementsystem/rsz_return1.png")), jPanel4); // NOI18N
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -544,40 +588,74 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
             }
         });
 
+        mngSrchTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mngSrchTxtActionPerformed(evt);
+            }
+        });
+        mngSrchTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                mngSrchTxtKeyReleased(evt);
+            }
+        });
+
+        jLabel11.setText("Search By:");
+
+        mngCmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ISBN", "Title", "Author", "Publisher" }));
+
+        mngClear.setText("Clear");
+        mngClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mngClearActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(pubadd))
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(isbnadd, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(18, 18, 18)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(titleadd)
-                                .addComponent(authoradd)))))
-                .addContainerGap(38, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Add)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Edit)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Delete)
-                .addGap(93, 93, 93))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
+                                .addGap(25, 25, 25)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(titleadd, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(isbnadd, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(authoradd, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addGap(24, 24, 24)
+                                        .addComponent(Add))
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addComponent(Edit)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(Delete)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(mngClear))
+                                    .addComponent(pubadd, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(mngCmbo, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(mngSrchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -602,13 +680,17 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Add)
                     .addComponent(Edit)
-                    .addComponent(Delete))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(Delete)
+                    .addComponent(mngSrchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11)
+                    .addComponent(mngCmbo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(mngClear))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(6, 6, 6))
         );
 
-        jTabbedPane6.addTab("Manage Books", new javax.swing.ImageIcon("C:\\Users\\justine\\Desktop\\School\\AppDEv\\AppDevProj\\Books-icon.png"), jPanel5); // NOI18N
+        jTabbedPane6.addTab("Manage Books", new javax.swing.ImageIcon(getClass().getResource("/librarymanagementsystem/rsz_manage1.png")), jPanel5); // NOI18N
 
         getContentPane().add(jTabbedPane6);
         jTabbedPane6.setBounds(40, 30, 585, 425);
@@ -623,6 +705,7 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
         jLabel4.setBounds(0, 0, 680, 480);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -697,10 +780,6 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
         crudrowtable();
     }//GEN-LAST:event_jTable2MouseClicked
-
-    private void isbnsrchInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_isbnsrchInputMethodTextChanged
-        tblesearch();
-    }//GEN-LAST:event_isbnsrchInputMethodTextChanged
 
     private void rtrnbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rtrnbutActionPerformed
         
@@ -841,6 +920,25 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
         tblertrn();
     }//GEN-LAST:event_rtrntxtKeyReleased
 
+    private void isbnsrchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_isbnsrchKeyReleased
+        tblesearch();
+    }//GEN-LAST:event_isbnsrchKeyReleased
+
+    private void mngSrchTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mngSrchTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mngSrchTxtActionPerformed
+
+    private void mngSrchTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mngSrchTxtKeyReleased
+        tbleMnagebooks();
+    }//GEN-LAST:event_mngSrchTxtKeyReleased
+
+    private void mngClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mngClearActionPerformed
+        isbnadd.setText("");
+        titleadd.setText("");
+        authoradd.setText("");
+        pubadd.setText("");
+    }//GEN-LAST:event_mngClearActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -891,6 +989,7 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -918,6 +1017,9 @@ String isbnBrw, isbnRtrn,studentId,brrwDate,rtrnDate,studRtrn,brwID;
     private javax.persistence.Query libraryQuery;
     private javax.persistence.Query libraryQuery1;
     private javax.persistence.Query libraryQuery2;
+    private javax.swing.JButton mngClear;
+    private javax.swing.JComboBox<String> mngCmbo;
+    private javax.swing.JTextField mngSrchTxt;
     private javax.swing.JTextField pubadd;
     private javax.swing.JButton rtrnbut;
     private javax.swing.JComboBox<String> rtrncmbo;
